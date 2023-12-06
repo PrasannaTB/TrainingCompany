@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import { AgGridReact } from 'ag-grid-react';
+import { Snackbar } from '@mui/material';
+import { Button } from '@mui/material';
 
 import dayjs from 'dayjs';
 import "ag-grid-community/styles/ag-grid.css";
@@ -8,6 +10,7 @@ import "ag-grid-community/styles/ag-theme-material.css";
 
 function Traininglist() {
   const [training, setTrainings] = useState([]);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     fetchTrainings();
@@ -27,6 +30,24 @@ function Traininglist() {
     .catch(err => console.error(err))
   }
 
+  const deleteTraining = (trainingId) => {
+    if(window.confirm("Are you sure?")) { 
+      const deleteUrl = import.meta.env.VITE_API_URL + `/trainings/${trainingId}`;
+      fetch(deleteUrl, { method: 'DELETE'})
+      .then(response => {
+        if(!response.ok) {
+          throw new Error("Error in deletion: " + response.statusText);
+        } else {
+          setOpen(true);
+          fetchTrainings();
+        }
+          
+      })
+      .catch(err => console.error(err))
+    }
+  }
+
+
   const formatDate = dateString => {
     return dayjs(dateString).format('MM/DD/YYYY HH:MM');
   };
@@ -36,9 +57,15 @@ function Traininglist() {
     { field: 'date', sortable: true, filter:true,  valueFormatter: params => formatDate(params.value) },
     { field: 'duration', sortable: true, filter:true },
     { field: 'activity', sortable: true, filter:true },
-    { headerName: 'Customer',
+    { 
+      headerName: 'Customer',
     valueGetter: params => `${params.data.customer.firstname} ${params.data.customer.lastname}`,
-    sortable: true, filter:true,}
+    sortable: true, filter:true,
+    },
+    { 
+      cellRenderer: params => <Button size="small" onClick={() => deleteTraining(params.data.id)}>Delete</Button>, 
+      width: 120
+    },
     
   ]);
 
@@ -54,6 +81,13 @@ function Traininglist() {
           paginationAutoPageSize={true}
         />
       </div>
+
+      <Snackbar 
+        open={open}
+        autoHideDuration={3000}
+        onClose={() => setOpen(false)}
+        message="Training deleted successfully"
+      />
      
     </>
 
