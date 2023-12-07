@@ -108,15 +108,6 @@ function Customerlist() {
           paginationAutoPageSize={true}
           skipHeader={true} // Exclude headers from export
           skipFooters={true}
-          /*
-          processCellCallback={(params) => {
-            // Exclude "Edit" and "Delete" columns from export
-            if (params.column.colId === 'editColumn' || params.column.colId === 'deleteColumn') {
-              return null;
-            }
-            return params.value;
-          }}*/
-
         />
 
         <div style={{ position: 'absolute', top: '80px', right: '20px' }}>

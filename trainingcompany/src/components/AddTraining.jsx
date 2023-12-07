@@ -26,25 +26,6 @@ export default function AddTraining({customerdata, fetchTraining}) {
   const handleClose = () => {
     setOpen(false);
   };
-/*
-  const fetchCustomerId = async (customerName) => {
-    try {
-      const response = await fetch(
-        `https://traineeapp.azurewebsites.net/customers?firstname=${customerName}`
-      );
-      const customerData = await response.json();
-
-      if (customerData && customerData.length > 0) {
-        return customerData[0].id;
-      } else {
-        throw new Error("Customer not found");
-      }
-    } catch (error) {
-      console.error("Error fetching customer ID:", error);
-      throw error;
-    }
-  };
-  */
 
   const handleSave = () => {
     const isoDate = dayjs(training.date).toISOString();
@@ -58,8 +39,6 @@ export default function AddTraining({customerdata, fetchTraining}) {
     .then(response => {
         if(!response.ok)
             throw new Error("Addition failed: " + response.statusText);
-        //fetchTraining();
-
     })
     .catch(err => {
       console.error(err);

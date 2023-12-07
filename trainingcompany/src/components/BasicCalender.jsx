@@ -48,7 +48,7 @@ const MyCalendarWithFetch = () => {
       opacity: 0.8,
       display: 'block',
       color: 'white',
-      textAlign: 'left', // Align text to the left
+      textAlign: 'left', 
     };
   
     return {
