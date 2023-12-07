@@ -17,8 +17,11 @@
     "ag-grid-community": "^31.0.0",
     "ag-grid-react": "^31.0.0",
     "dayjs": "^1.11.10",
+    "file-save": "^0.2.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-big-calendar": "^1.8.5",
+    "react-dom": "^18.2.0",
+    "react-papaparse": "^4.4.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.37",

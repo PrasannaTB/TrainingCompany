@@ -1,18 +1,17 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { AgGridReact } from 'ag-grid-react';
-import { Snackbar } from '@mui/material';
-import { Button } from '@mui/material';
+import { Snackbar, Button } from '@mui/material';
 
-import "ag-grid-community/styles/ag-grid.css";
-import "ag-grid-community/styles/ag-theme-material.css";
+import 'ag-grid-community/styles/ag-grid.css';
+import 'ag-grid-community/styles/ag-theme-material.css';
 import AddCustomer from './AddCustomer';
 import EditCustomer from './EditCustomer';
-
 
 function Customerlist() {
   const [customer, setCustomers] = useState([]);
   const [open, setOpen] = useState(false);
   const [trainings, setTrainings] = useState([]);
+  const gridRef = useRef();
 
   useEffect(() => {
     fetchCustomers();
@@ -20,17 +19,16 @@ function Customerlist() {
 
   const fetchCustomers = () => {
     fetch(import.meta.env.VITE_API_URL + `/customers`)
-    .then(response => {
-      if(!response.ok) 
-        throw new Error("Something went wrong: " + response.statusText);
-      
-      return response.json();
-    })
-    .then(data => {
-      setCustomers(data.content);
-    })
-    .catch(err => console.error(err))
-  }
+      .then((response) => {
+        if (!response.ok) throw new Error('Something went wrong: ' + response.statusText);
+
+        return response.json();
+      })
+      .then((data) => {
+        setCustomers(data.content);
+      })
+      .catch((err) => console.error(err));
+  };
 
   const fetchTrainings = () => {
     fetch(import.meta.env.VITE_API_URL + `/trainings`)
@@ -45,64 +43,73 @@ function Customerlist() {
   };
 
   const deleteCustomer = (url) => {
-    if(window.confirm("Are you sure?")) { 
-      fetch(url, { method: 'DELETE'})
-      .then(response => {
-        if(!response.ok) {
-          throw new Error("Error in deletion: " + response.statusText);
-        } else {
-          setOpen(true);
-          fetchCustomers();
-        }
-          
-      })
-      .catch(err => console.error(err))
+    if (window.confirm('Are you sure?')) {
+      fetch(url, { method: 'DELETE' })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error('Error in deletion: ' + response.statusText);
+          } else {
+            setOpen(true);
+            fetchCustomers();
+          }
+        })
+        .catch((err) => console.error(err));
     }
-  }
+  };
 
-
+  const onBtnExport = useCallback(() => {
+    gridRef.current.api.exportDataAsCsv();
+  }, []);
 
   const [columnDefs] = useState([
-    { field: 'firstname', sortable: true, filter:true },
-    { field: 'lastname', sortable: true, filter:true },
-    { field: 'streetaddress', sortable: true, filter:true },
-    { field: 'postcode', sortable: true, filter:true, width: 120 },
-    { field: 'city', sortable: true, filter:true, width: 130 },
-    { field: 'email', sortable: true, filter:true },
-    { field: 'phone', sortable: true, filter:true },
-    
+    { field: 'firstname', sortable: true, filter: true },
+    { field: 'lastname', sortable: true, filter: true },
+    { field: 'streetaddress', sortable: true, filter: true },
+    { field: 'postcode', sortable: true, filter: true, width: 120 },
+    { field: 'city', sortable: true, filter: true, width: 130 },
+    { field: 'email', sortable: true, filter: true },
+    { field: 'phone', sortable: true, filter: true },
     {
-      cellRenderer: params => <EditCustomer customerdata={params.data} fetchCustomers={fetchCustomers} />,
-      width: 120
+      cellRenderer: (params) => <EditCustomer customerdata={params.data} fetchCustomers={fetchCustomers} />,
+      width: 120,
+      colId: 'editColumn', 
+      suppressMenu: true,
     },
-    { 
-      cellRenderer: params => <Button size="small" onClick={() => deleteCustomer(params.data.links[0].href)}>Delete</Button>, 
-      width: 120
+    {
+      cellRenderer: (params) => (
+        <Button size='small' onClick={() => deleteCustomer(params.data.links[0].href)}>
+          Delete
+        </Button>
+      ),
+      width: 120,
+      colId: 'deleteColumn', 
+      suppressMenu: true,
     },
   ]);
 
-
-  return(
-    <>
-      <AddCustomer fetchCustomers = {fetchCustomers}/>
-      <div className='ag-theme-material' style={{width: '100%', height: 600}}> 
-        <AgGridReact 
+  return (
+    
+    <div>
+      <h3>Customers</h3>
+      <AddCustomer fetchCustomers={fetchCustomers} />
+      <div className='ag-theme-material' style={{ width: '100%', height: 600 }}>
+        <div style={{ margin: '10px 0' }}>
+          <button onClick={onBtnExport}>Download CSV export file</button>
+        </div>
+        <AgGridReact
+          ref={gridRef}
           rowData={customer}
           columnDefs={columnDefs}
           pagination={true}
           paginationAutoPageSize={true}
+          skipHeader={true} 
+          skipFooters={true}
+          
         />
       </div>
 
-      <Snackbar 
-        open={open}
-        autoHideDuration={3000}
-        onClose={() => setOpen(false)}
-        message="Customer deleted successfully"
-      />
-     
-    </>
-
+      <Snackbar open={open} autoHideDuration={3000} onClose={() => setOpen(false)} message='Customer deleted successfully' />
+    </div>
   );
 }
 

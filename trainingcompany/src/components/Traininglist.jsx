@@ -72,6 +72,7 @@ function Traininglist() {
 
   return(
     <>
+      <h3>Trainings</h3>
       
       <div className='ag-theme-material' style={{width: '100%', height: 600}}> 
         <AgGridReact 

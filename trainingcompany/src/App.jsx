@@ -1,12 +1,13 @@
-import { useState } from 'react'
-import TabApp from './components/Tabs';
+import DrawerComponent from "./components/DrawerComponent"
 
 function App() {
-  const [count, setCount] = useState(0)
+  
 
   return (
     <>
-      <TabApp />
+      
+      <DrawerComponent />
+      
     </>
   )
 }
