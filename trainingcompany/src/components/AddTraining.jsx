@@ -8,7 +8,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import AddIcon from '@mui/icons-material/Add';
 
-export default function AddTraining({fetchTraining}) {
+export default function AddTraining({customerdata, fetchTraining}) {
   const [open, setOpen] = useState(false);
   const [training, setTraining] = useState({
     date: "",
@@ -20,12 +20,13 @@ export default function AddTraining({fetchTraining}) {
 
   const handleClickOpen = () => {
     setOpen(true);
+    setTraining({...training, customer: customerdata.links[0].href})
   };
 
   const handleClose = () => {
     setOpen(false);
   };
-
+/*
   const fetchCustomerId = async (customerName) => {
     try {
       const response = await fetch(
@@ -43,6 +44,7 @@ export default function AddTraining({fetchTraining}) {
       throw error;
     }
   };
+  */
 
   const handleSave = () => {
     const isoDate = dayjs(training.date).toISOString();
@@ -56,10 +58,13 @@ export default function AddTraining({fetchTraining}) {
     .then(response => {
         if(!response.ok)
             throw new Error("Addition failed: " + response.statusText);
-        fetchTraining();
+        //fetchTraining();
 
     })
-    .catch(err => console.error(err))
+    .catch(err => {
+      console.error(err);
+      alert("Failed to add training. Please try again.");
+    })
     
     handleClose();
   }
