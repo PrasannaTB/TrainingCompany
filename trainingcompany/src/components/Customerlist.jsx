@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import { Snackbar, Button } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-material.css';
 import AddCustomer from './AddCustomer';
 import EditCustomer from './EditCustomer';
+import AddTraining from './AddTraining';
 
 function Customerlist() {
   const [customer, setCustomers] = useState([]);
@@ -70,6 +72,12 @@ function Customerlist() {
     { field: 'email', sortable: true, filter: true },
     { field: 'phone', sortable: true, filter: true },
     {
+      cellRenderer: (params) => <AddTraining customerdata={params.data} fetchCustomers={fetchCustomers} />,
+      width: 120,
+      colId: 'addTraining', 
+      suppressMenu: true,
+    },
+    {
       cellRenderer: (params) => <EditCustomer customerdata={params.data} fetchCustomers={fetchCustomers} />,
       width: 120,
       colId: 'editColumn', 
@@ -78,7 +86,7 @@ function Customerlist() {
     {
       cellRenderer: (params) => (
         <Button size='small' onClick={() => deleteCustomer(params.data.links[0].href)}>
-          Delete
+          <DeleteIcon style={{ color: 'red' }} />
         </Button>
       ),
       width: 120,
@@ -88,28 +96,46 @@ function Customerlist() {
   ]);
 
   return (
-    
-    <div>
-      <h3>Customers</h3>
+    <>
+      <h3 style={{fontFamily : 'highrise'}}>CUSTOMERS</h3>
       <AddCustomer fetchCustomers={fetchCustomers} />
       <div className='ag-theme-material' style={{ width: '100%', height: 600 }}>
-        <div style={{ margin: '10px 0' }}>
-          <button onClick={onBtnExport}>Download CSV export file</button>
-        </div>
         <AgGridReact
           ref={gridRef}
           rowData={customer}
           columnDefs={columnDefs}
           pagination={true}
           paginationAutoPageSize={true}
-          skipHeader={true} 
+          skipHeader={true} // Exclude headers from export
           skipFooters={true}
-          
+          /*
+          processCellCallback={(params) => {
+            // Exclude "Edit" and "Delete" columns from export
+            if (params.column.colId === 'editColumn' || params.column.colId === 'deleteColumn') {
+              return null;
+            }
+            return params.value;
+          }}*/
+
         />
+
+        <div style={{ position: 'absolute', top: '80px', right: '20px' }}>
+          <button 
+            style={{
+              padding: '8px',
+              fontSize: '15px',
+              color: 'black',
+              border: 'black',
+              cursor: 'pointer',
+            }}
+            onClick={onBtnExport}>Export file</button>
+        </div>
+        
+
       </div>
 
       <Snackbar open={open} autoHideDuration={3000} onClose={() => setOpen(false)} message='Customer deleted successfully' />
-    </div>
+    </>
   );
 }
 

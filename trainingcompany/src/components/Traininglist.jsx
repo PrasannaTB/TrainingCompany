@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import { Snackbar } from '@mui/material';
 import { Button } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 import dayjs from 'dayjs';
 import "ag-grid-community/styles/ag-grid.css";
@@ -15,6 +16,7 @@ function Traininglist() {
   useEffect(() => {
     fetchTrainings();
   }, []);
+
 
   const fetchTrainings = () => {
     fetch(`https://traineeapp.azurewebsites.net/gettrainings`)
@@ -49,7 +51,7 @@ function Traininglist() {
 
 
   const formatDate = dateString => {
-    return dayjs(dateString).format('MM/DD/YYYY HH:MM');
+    return dayjs(dateString).format('DD/MM/YYYY HH:MM');
   };
 
 
@@ -63,7 +65,9 @@ function Traininglist() {
     sortable: true, filter:true,
     },
     { 
-      cellRenderer: params => <Button size="small" onClick={() => deleteTraining(params.data.id)}>Delete</Button>, 
+      cellRenderer: params => <Button size="small" onClick={() => deleteTraining(params.data.id)}>
+        <DeleteIcon style={{ color: 'red' }} />
+      </Button>, 
       width: 120
     },
     
@@ -72,7 +76,7 @@ function Traininglist() {
 
   return(
     <>
-      <h3>Trainings</h3>
+      <h3 style={{fontFamily : 'highrise'}}>Trainings</h3>
       
       <div className='ag-theme-material' style={{width: '100%', height: 600}}> 
         <AgGridReact 

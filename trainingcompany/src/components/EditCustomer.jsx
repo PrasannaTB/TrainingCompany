@@ -5,6 +5,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
+import EditIcon from '@mui/icons-material/Edit';
 
 export default function EditCustomer({customerdata, fetchCustomers}) {
   const [open, setOpen] = useState(false);
@@ -55,7 +56,7 @@ export default function EditCustomer({customerdata, fetchCustomers}) {
   return (
     <>
       <Button size="small" onClick={handleClickOpen}>
-        Edit
+        <EditIcon style={{ color: 'inherit' }} />
       </Button>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Update Customer</DialogTitle>

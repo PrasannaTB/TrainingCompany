@@ -16,12 +16,15 @@
     "@mui/material": "^5.14.19",
     "ag-grid-community": "^31.0.0",
     "ag-grid-react": "^31.0.0",
+    "atatus-spa": "^4.6.0",
+    "axios": "^1.6.2",
     "dayjs": "^1.11.10",
     "file-save": "^0.2.0",
     "react": "^18.2.0",
     "react-big-calendar": "^1.8.5",
     "react-dom": "^18.2.0",
-    "react-papaparse": "^4.4.0"
+    "react-papaparse": "^4.4.0",
+    "recharts": "^2.10.3"
   },
   "devDependencies": {
     "@types/react": "^18.2.37",

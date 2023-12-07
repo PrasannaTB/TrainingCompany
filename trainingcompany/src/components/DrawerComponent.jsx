@@ -20,11 +20,12 @@ import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
 import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import BarChartIcon from '@mui/icons-material/BarChart';
+import Brightness4Icon from '@mui/icons-material/Brightness4';
 
 import Customerlist from './Customerlist';
 import Traininglist from './Traininglist';
 import MyCalendarWithFetch from './BasicCalender';
-
+import TrainingChart from './TrainingStatistics';
 
 const drawerWidth = 240;
 
@@ -68,7 +69,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
   padding: theme.spacing(0, 1),
-  
+  // necessary for content to be below app bar
   ...theme.mixins.toolbar,
   justifyContent: 'flex-end',
 }));
@@ -151,10 +152,11 @@ export default function PersistentDrawerLeft() {
         <Main open={open}>
           <DrawerHeader />
           <Typography paragraph>
-          {selectedTab.toLowerCase() === 'customer list' && <Customerlist />}
-          {selectedTab.toLowerCase() === 'training list' && <Traininglist />}
-          {selectedTab.toLowerCase() === 'calendar' && <MyCalendarWithFetch />}
-            </Typography>
+            {selectedTab.toLowerCase() === 'customer list' && <Customerlist />}
+            {selectedTab.toLowerCase() === 'training list' && <Traininglist />}
+            {selectedTab.toLowerCase() === 'calendar' && <MyCalendarWithFetch />}
+            {selectedTab.toLowerCase() === 'statistics' && <TrainingChart />}
+          </Typography>
       </Main>
     </Box>
   );
